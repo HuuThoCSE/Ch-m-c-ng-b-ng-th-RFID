@@ -1,1 +1,9 @@
-# Ch-m-c-ng-b-ng-th-RFID
+# Chấm công bằng thẻ RFID
+## Thiết bị
+- Đồ đọc thẻ RFID IC Card / Tag Reader 13.56MHz USB
+
+## Phần mềm
+- [RFID Reader Format Setting Demo](https://www.mediafire.com/file/7v8s2lxvixyz12p/%255BHshop.vn%255D_Format_Setting_Demo.zip/file)'
+
+## Cách sài
+- Cắm USB thiết bị PC/Laptop rùi sử dụng
