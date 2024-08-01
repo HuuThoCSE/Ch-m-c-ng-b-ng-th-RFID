@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RFID Attendance System</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const input = document.getElementById('card_uid');
+
+            input.addEventListener('change', () => {
+                const value = input.value;
+
+                // Gửi giá trị đến server
+                fetch('/read_rfid', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ card_uid: value }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                    updateAttendanceList();
+                    input.value = ''; // Xóa giá trị trong ô nhập liệu
+                    input.focus(); // Đặt lại tiêu điểm vào ô nhập liệu
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            });
+
+            // Hàm cập nhật danh sách điểm danh
+            function updateAttendanceList() {
+                fetch('/attendance_list')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('attendance-table-body');
+                    tableBody.innerHTML = ''; // Xóa các hàng hiện tại
+                    data.forEach((item, index) => {
+                        const row = document.createElement('tr');
+                        const cellIndex = document.createElement('td');
+                        const cellUID = document.createElement('td');
+                        const cellTimestamp = document.createElement('td');
+
+                        cellIndex.textContent = index + 1;
+                        cellUID.textContent = item.card_uid;
+                        cellTimestamp.textContent = item.timestamp;
+
+                        row.appendChild(cellIndex);
+                        row.appendChild(cellUID);
+                        row.appendChild(cellTimestamp);
+
+                        tableBody.appendChild(row);
+                    });
+                    input.focus(); // Đặt lại tiêu điểm vào ô nhập liệu
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            }
+
+            // Gọi hàm updateAttendanceList khi trang được tải
+            updateAttendanceList();
+        });
+    </script>
+</head>
+<body class="bg-light">
+    <div class="container">
+        <div class="py-5 text-center">
+            <h1 class="display-4">RFID Attendance System</h1>
+        </div>
+        <form class="mb-5">
+            <div class="form-group">
+                <label for="card_uid" class="font-weight-bold">Scan RFID Card:</label>
+                <input type="text" class="form-control" id="card_uid" name="card_uid" required>
+            </div>
+        </form>
+
+        <h2 class="mb-3">Attendance List</h2>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Card UID</th>
+                        <th>Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody id="attendance-table-body">
+                    <!-- Danh sách điểm danh sẽ được cập nhật ở đây -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

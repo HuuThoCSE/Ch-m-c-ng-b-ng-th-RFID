@@ -10,3 +10,11 @@
 
 ## Cách sài
 - Cắm USB thiết bị PC/Laptop rùi sử dụng
+
+# Code
+## Run code
+```
+pip install -r requirements.txt
+```
+
+
